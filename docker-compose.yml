@@ -8,7 +8,6 @@ services:
     - MYSQL_ROOT_PASSWORD=123456
     - MYSQL_DATABASE=gpmall
    volumes:
-#    - "/Users/wangzhong/datas/mysql:/var/lib/mysql"
     - "~/dev/env/data/mysql:/var/lib/mysql"
  elasticsearch:
   image: elasticsearch:6.6.1
@@ -26,7 +25,7 @@ services:
   volumes:
 #    - "/Users/wangzhong/datas/es/data:/usr/share/elasticsearch/data"
     - "~/dev/env/data//es/data:/usr/share/elasticsearch/data"
-= kibana:
+ kibana:
   image: kibana:6.6.1
   environment:
     SERVER_NAME:
