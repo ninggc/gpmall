@@ -1,55 +1,63 @@
 version: '3'
 services:
- db1:
-   image: mysql
-   ports:
-    - "3306:3306"
-   environment:
-    - MYSQL_ROOT_PASSWORD=123456
-    - MYSQL_DATABASE=gpmall
-   volumes:
-    - "~/dev/env/data/mysql:/var/lib/mysql"
- elasticsearch:
-  image: elasticsearch:6.6.1
-  environment:
-    - cluster.name=elasticsearch
-    - bootstrap.memory_lock=true
-    - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-  ulimits:
-    memlock:
-      soft: -1
-      hard: -1
-  ports:
-    - 9200:9200
-    - 9300:9300
-  volumes:
-#    - "/Users/wangzhong/datas/es/data:/usr/share/elasticsearch/data"
-    - "~/dev/env/data//es/data:/usr/share/elasticsearch/data"
- kibana:
-  image: kibana:6.6.1
-  environment:
-    SERVER_NAME:
-    ELASTICSEARCH_HOSTS: http://localhost:9200
-  ports:
-    - 5601:5601
- kafka:
-  image: wurstmeister/kafka
-  ports:
-    - "9092:9092"
-  environment:
-    KAFKA_ADVERTISED_HOST_NAME: localhost
-    KAFKA_ADVERTISED_PORT: 9092
-    #      HOSTNAME_COMMAND: "cat /etc/hosts | tail -1 | awk '{print $$1}'"
-    #      KAFKA_ADVERTISED_LISTENERS: INSIDE://:9092,OUTSIDE://_{HOSTNAME_COMMAND}:9094
-    #      KAFKA_LISTENERS: INSIDE://:9092,OUTSIDE://:9094
-    #      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
-    #      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
-    KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
- redis:
+  db1:
+    image: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=gpmall
+    volumes:
+      - "/env/data/mysql:/var/lib/mysql"
+  elasticsearch:
+    image: elasticsearch:6.6.1
+    environment:
+      - cluster.name=elasticsearch
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+      - 9300:9300
+    volumes:
+      - "/env/data/es/data:/usr/share/elasticsearch/data"
+  kibana:
+    image: kibana:6.6.1
+    environment:
+      SERVER_NAME:
+      ELASTICSEARCH_HOSTS: http://localhost:9200
+    ports:
+      - 5601:5601
+  kafka:
+    image: wurstmeister/kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_ADVERTISED_PORT: 9092
+      #      HOSTNAME_COMMAND: "cat /etc/hosts | tail -1 | awk '{print $$1}'"
+      #      KAFKA_ADVERTISED_LISTENERS: INSIDE://:9092,OUTSIDE://_{HOSTNAME_COMMAND}:9094
+      #      KAFKA_LISTENERS: INSIDE://:9092,OUTSIDE://:9094
+      #      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      #      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+  redis:
     image: redis
     ports:
       - "6379:6379"
- zookeeper:
+  zookeeper:
     image: wurstmeister/zookeeper
     ports:
       - "2181:2181"
+  kafka-manager:
+    image: sheepkiller/kafka-manager
+    environment:
+      ZK_HOSTS: 192.168.0.66:62181,192.168.0.66:62182,192.168.0.66:62183,localhost:2181
+      APPLICATION_SECRET: "letmein"
+    ports:
+      - "9000:9000"
+    expose:
+      - "9000"
