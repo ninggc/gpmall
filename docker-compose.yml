@@ -8,7 +8,7 @@ services:
       - MYSQL_ROOT_PASSWORD=123456
       - MYSQL_DATABASE=gpmall
     volumes:
-      - "/env/data/mysql:/var/lib/mysql"
+      - "/data/volume/mysql:/var/lib/mysql"
   elasticsearch:
     image: elasticsearch:6.6.1
     environment:
@@ -23,7 +23,7 @@ services:
       - 9200:9200
       - 9300:9300
     volumes:
-      - "/env/data/es/data:/usr/share/elasticsearch/data"
+      - "/data/volume/es/data:/usr/share/elasticsearch/data"
   kibana:
     image: kibana:6.6.1
     environment:
@@ -55,8 +55,8 @@ services:
   kafka-manager:
     image: sheepkiller/kafka-manager
     environment:
-      ZK_HOSTS: 192.168.0.66:62181,192.168.0.66:62182,192.168.0.66:62183,localhost:2181
-      APPLICATION_SECRET: "letmein"
+      ZK_HOSTS: localhost:2181
+      APPLICATION_SECRET: "ninggc"
     ports:
       - "9000:9000"
     expose:
